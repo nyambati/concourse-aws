@@ -9,6 +9,8 @@
 #  $AWS_KEYPAIR_KEY_NAME
 #  $PRIVATE_KEY_PATH
 
+source ./bin/credentials
+
 function getvars() {
   cd terraform/
   EIP=$(terraform output eip)

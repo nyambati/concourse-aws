@@ -1,2 +1,4 @@
 credentials
-$.tfvars
+*.tfvars
+bosh-director.yml
+terraform/terraform.tfstate

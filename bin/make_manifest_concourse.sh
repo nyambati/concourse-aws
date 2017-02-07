@@ -7,6 +7,8 @@
 #  $GITHUB_CLIENT_ID
 #  $GITHUB_CLIENT_SECRET
 
+source ./credentials
+
 DIRECTOR_UUID=`bosh status --uuid`
 
 echo "director_uuid = $DIRECTOR_UUID"

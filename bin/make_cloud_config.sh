@@ -3,6 +3,7 @@
 #  Please set the following environment variables:
 #  $AWS_AZ
 
+source credentials
 
 function getvars() {
   cd terraform/

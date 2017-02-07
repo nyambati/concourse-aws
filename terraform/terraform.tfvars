@@ -1,7 +1,7 @@
 source_access_ip="105.21.32.62/32"
 ssl_cert_arn="arn:aws:acm:us-east-1:730392384488:certificate/a85af819-b287-48b0-a241-38f5ab171dfa"
 ci_dns_zone_id="ZGK12OEL6POLA"
-ci_hostname="engineer-thomas.info"
+ci_hostname="ci"
 source_access_block1="105.21.32.62/32"
 source_access_block2="41.209.15.146/32"
 aws_profile ="bootrank"
