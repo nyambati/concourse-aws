@@ -1,4 +1,6 @@
-credentials
+setup/bin/credentials
 *.tfvars
 bosh-director.yml
 terraform/terraform.tfstate
+config
+launchpad/credentials.yml

@@ -1,0 +1,88 @@
+---
+name: concourse
+
+director_uuid: 3c5b8990-a019-4168-a00e-7c0f3632ff41
+
+releases:
+- name: concourse
+  version: latest
+- name: garden-runc
+  version: latest
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: concourse
+  instances: 1
+  vm_type: concourse_standalone
+  stemcell: trusty
+  azs: [z1]
+  networks: [{name: ops_services}]
+  jobs:
+  - name: atc
+    release: concourse
+    properties:
+      # replace with your CI's externally reachable URL e.g https://blah
+      external_url: https://ci.engineer-thomas.info
+      # configure GitHub auth
+      github_auth:
+        authorize:
+        - organization: andela
+          teams: [CI]
+        client_id: ba1f9f37895a53d78b32
+        client_secret: b5b081e99d9918835ef5c3b1bd49a1dc3eb83c2c
+
+      postgresql_database: &atc_db atc
+  - name: tsa
+    release: concourse
+    properties: {}
+
+- name: db
+  instances: 1
+  vm_type: concourse_db
+  stemcell: trusty
+  # choose a disk type from the cloud-config
+  persistent_disk_type: default
+  azs: [z1]
+  networks: [{name: ops_services}]
+  jobs:
+  - name: postgresql
+    release: concourse
+    properties:
+      databases:
+      - name: *atc_db
+        # make up a role and password
+        role: dbrole
+        password: D0ct0r5tr@n93
+
+- name: worker
+  instances: 1
+  vm_type: concourse_worker
+  stemcell: trusty
+  azs: [z1]
+  networks: [{name: ops_services}]
+  jobs:
+  - name: groundcrew
+    release: concourse
+    properties: {}
+
+  - name: baggageclaim
+    release: concourse
+    properties: {}
+
+  - name: garden
+    release: garden-runc
+    properties:
+      garden:
+        listen_network: tcp
+        listen_address: 0.0.0.0:7777
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  serial: false
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000

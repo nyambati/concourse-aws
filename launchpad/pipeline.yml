@@ -1,0 +1,38 @@
+groups:
+  - name: launchpad
+    jobs:
+      - run-build-front-end
+
+jobs:
+  - name: run-build-front-end
+    plan:
+      - get: lp-core
+      - get: deployment-scripts
+      - task: build-frontend
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: thomasnyambati/nyas
+              tag: 'latest'
+          inputs:
+            - name: deployment-scripts
+            - name: lp-core
+          run:
+            path: deployment-scripts/scripts/buid_front_end.sh
+resources:
+ - name: lp-core
+   type: git
+   source:
+      uri: git@bitbucket.org:nyaslaunchpad/lp-core.git
+      branch: dev
+      private_key: {{launchpad_private_key}}
+
+ - name: deployment-scripts
+   type: git
+   source:
+      uri: https://github.com/nyambati/concourse-aws.git
+      branch: master
+
